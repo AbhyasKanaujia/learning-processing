@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Circles</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Random Circles</h1>
+    <script>
+        let lastUpdateTime = 0;
+        let currentFrameRate = 0;
+
+        function showFrameRate() {
+            const now = millis();
+            if (now - lastUpdateTime > 1000) {
+                lastUpdateTime = now;
+                currentFrameRate = Math.floor(frameRate());
+            }
+
+            rectMode(CENTER)
+            fill("white");
+            rect(30, 10, 40, 20);
+            fill("black")
+            textAlign(CENTER, CENTER);
+            text(currentFrameRate + " fps", 30, 10);
+        }
+
+        function setup() {
+            createCanvas(400, 400);
+        }
+
+        function draw() {
+            fill(
+                random(0, 255),
+                random(0, 255),
+                random(0, 255),
+                random(0, 100)
+            )
+            const diam = random(20);
+            noStroke();
+            ellipse(
+                random(0, width),
+                random(0, height),
+                random(0, diam),
+            )
+        }
+    </script>
+</main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zoog </title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<script>
+    function setup() {
+        createCanvas(200, 200);
+    }
+
+    function draw() {
+        background(255);
+
+        // set CENTER mode
+        ellipseMode(CENTER);
+        rectMode(CENTER);
+
+        // Draw Zoog's body
+        stroke(0);
+        fill(150);
+        rect(100, 100, 20, 100);
+
+        // Draw Zoog's head
+        stroke(0);
+        fill(255);
+        ellipse(100, 70, 60, 60);
+
+        // Draw Zoog's eyes
+        stroke(0);
+        fill(0);
+        ellipse(81, 70, 16, 32);
+        ellipse(119, 70, 16, 32);
+
+        // Draw Zoog's legs
+        stroke(0);
+        line(90, 150, 80, 160);
+        line(110, 150, 120, 160);
+
+    }
+</script>
+</body>
+</html>

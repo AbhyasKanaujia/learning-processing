@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-3: Perlin Random Ball</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<header>
+    <h1>Drawing using shapes</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="sketch"></div>
+</main>
+<script>
+    function setup() {
+        const canvas = createCanvas(600, 600);
+        canvas.parent("sketch");
+        strokeWeight(2)
+        translate(5, 5);
+        rect(0, 0, 400, 400);
+        fill("black");
+        rect(0, 0, 200, 200);
+        fill("grey");
+        rect(200, 200, 200, 200);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Little Squares</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Little Squares</h1>
+    <script>
+        function setup() {
+            createCanvas(400, 400);
+            background(255);
+            for(let i = 0; i < width / 2; i += 20) {
+                square(i, height / 2, 5);
+            }
+        }
+    </script>
+</main>
+</body>
+</html>

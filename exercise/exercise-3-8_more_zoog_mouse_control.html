@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>More Zoog mouse control</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>More Zoog mouse control</h1>
+    <script>
+        let lastUpdateTime = 0;
+        let currentFrameRate = 0;
+
+        function showFrameRate() {
+            const now = millis();
+            if (now - lastUpdateTime > 1000) {
+                lastUpdateTime = now;
+                currentFrameRate = Math.floor(frameRate());
+            }
+
+            rectMode(CENTER)
+            fill("white");
+            rect(30, 10, 40, 20);
+            fill("black")
+            textAlign(CENTER, CENTER);
+            text(currentFrameRate + " fps", 30, 10);
+        }
+
+        function setup() {
+            createCanvas(400, 400);
+        }
+
+        function getMouseSpeed() {
+            return dist(mouseX, mouseY, pmouseX, pmouseY);
+        }
+
+        function getEyeColor() {
+            const red = map(mouseX, 0, width, 0, 255);
+            const green = map(mouseY, 0, height, 0, 255);
+            const blue = map(getMouseSpeed(), 0, width, 0, 255);
+
+            return color(red, green, blue);
+        }
+
+        function draw() {
+            background(255);
+
+            showFrameRate();
+
+            // set CENTER mode
+            ellipseMode(CENTER);
+            rectMode(CENTER);
+
+            // Draw Zoog's body
+            stroke(0);
+            fill(150);
+            rect(mouseX, mouseY, 20, 100);
+
+            // Draw Zoog's head
+            stroke(0);
+            fill(255);
+            ellipse(mouseX, mouseY - 30, 60, 60);
+
+            // Draw Zoog's eyes
+            stroke(0);
+            fill(getEyeColor());
+            ellipse(mouseX - 19, mouseY - 30, 16, 32);
+            ellipse(mouseX + 19, mouseY - 30, 16, 32);
+
+            // Draw Zoog's legs
+            stroke(0);
+            line(mouseX - 10, mouseY + 50, pmouseX - 20, pmouseY + 60);
+            line(mouseX + 10, mouseY + 50, pmouseX + 20, pmouseY + 60);
+
+        }
+
+        function mouseClicked() {
+            alert("Take me to your leader!");
+        }
+    </script>
+</main>
+</body>
+</html>

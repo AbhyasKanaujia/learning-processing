@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-3: Perlin Random Ball</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Ball.js"></script>
+    <script src="../lib/Grid.js"></script>
+</head>
+<body>
+<header>
+    <h1>Perlin Random Ball</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <p>This ball uses Perlin noise to set it&apos;s position</p>
+    <div class="sketch-container">
+        <div id="sketch"></div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="perlinXIncrement">Perlin X Increment:</label>
+                <input id="perlinXIncrement" max="1" min="0" step="0.0001" type="number" value="0.001">
+                <p class="control-description">
+                    Adjust the Perlin noise increment for the X-axis. Lower values will make the movement smoother,
+                    while higher values will increase the randomness.
+                </p>
+            </div>
+            <div class="control-group">
+                <label for="perlinYIncrement">Perlin Y Increment:</label>
+                <input id="perlinYIncrement" max="1" min="0" step="0.0001" type="number" value="0.001">
+                <p class="control-description">
+                    Adjust the Perlin noise increment for the Y-axis. Similar to X, this controls how smoothly the ball
+                    moves vertically.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    let ball = null;
+    let grid = null;
+
+    function setup() {
+        const container = document.querySelector("#sketch");
+        const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+        canvas.parent("sketch");
+        ball = new PerlinBall();
+        grid = new Grid();
+    }
+
+    function draw() {
+        background(255);
+        grid.display();
+        ball.display();
+        ball.move();
+    }
+
+    document.getElementById("perlinXIncrement").addEventListener("input", () => {
+        ball.perlinXIncrement = parseFloat(document.getElementById("perlinXIncrement").value);
+    })
+
+    document.getElementById("perlinYIncrement").addEventListener("input", () => {
+        ball.perlinYIncrement = parseFloat(document.getElementById("perlinYIncrement").value);
+    })
+</script>
+</body>
+</html>

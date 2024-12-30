@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive for loop drawing</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Interactive for loop drawing</h1>
+    <script>
+        function setup() {
+            createCanvas(400, 400);
+        }
+        function draw() {
+            let bandWidth = 1;
+            for(let col = 0; col < width; col += bandWidth) {
+                noStroke();
+                fill(255 - map(abs(mouseX - col), 0, width, 0.90, 1) * 255);
+                rect(col, 0, bandWidth, height);
+            }
+        }
+    </script>
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resness based on mouse conditions</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Resness based on mouse conditions</h1>
+    <script>
+        let lastUpdateTime = 0;
+        let currentFrameRate = 0;
+
+        function showFrameRate() {
+            const now = millis();
+            if(now - lastUpdateTime > 1000) {
+                lastUpdateTime = now;
+                currentFrameRate = Math.floor(frameRate());
+            }
+
+            rectMode(CENTER)
+            fill("white");
+            rect(30, 10, 40, 20);
+            fill("black")
+            textAlign(CENTER, CENTER);
+            text(currentFrameRate + " fps", 30, 10);
+        }
+
+        let r = 150;
+        let g = 0;
+        let b = 0;
+
+
+        function setup(){
+            createCanvas(windowWidth, windowHeight);
+        }
+        function draw() {
+            showFrameRate()
+            r = mouseX > width / 2 ? min(r + 1, 255) : max(r - 1, 0);
+            g = mouseY > height / 2 ? min(g + 1, 255) : max(g - 1, 0);
+            b = mouseIsPressed ? min(b + 1, 255) : max(b - 1, 0);
+            background(r, g, b, 10);
+        }
+    </script>
+</main>
+</body>
+</html>

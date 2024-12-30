@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-3: Perlin Random Ball</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/GIrl.js"></script>
+</head>
+<body>
+<header>
+    <h1>Girl Character</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="sketch"></div>
+</main>
+<script>
+    let girl = null;
+
+    function setup() {
+        const container = document.querySelector("#sketch")
+        const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+        canvas.parent('sketch');
+        const girlHeight = random(height / 2, 200);
+        const outfitColor = color(random(0, 255), random(0, 255), random(0, 255));
+        girl = new Girl({
+            name: `Kavya`,
+            height: girlHeight,
+            posX: random(girlHeight, width - girlHeight),
+            posY: random(girlHeight, height - girlHeight),
+            armsAngle: random(PI / 10, PI / 2),
+            dressAngle: random(PI / 10, PI / 5),
+            dressColor: outfitColor,
+            shoesColor: outfitColor
+        })
+
+    }
+
+    function draw() {
+        background(220);
+        girl.show();
+    }
+</script>
+</body>
+</html>

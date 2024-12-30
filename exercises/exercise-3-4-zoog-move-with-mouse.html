@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make zoog move with the mouse</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Zoog.js"></script>
+</head>
+<body>
+<a href="../index.html">Home</a>
+<main>
+    <h1>Make zoog move with the mouse</h1>
+    <script>
+        let lastUpdateTime = 0;
+        let currentFrameRate = 0;
+        let zoog = null;
+        function setup() {
+            createCanvas(200, 200);
+            zoog = new Zoog(width / 2, height / 2);
+        }
+
+        function showFrameRate() {
+            const now = millis();
+            if(now - lastUpdateTime > 1000) {
+                lastUpdateTime = now;
+                currentFrameRate = Math.floor(frameRate());
+            }
+            text(currentFrameRate, 10, 10);
+        }
+
+        function draw() {
+            background(255);
+            showFrameRate();
+            zoog.move(mouseX, mouseY);
+            zoog.display();
+        }
+    </script>
+</main>
+</body>
+</html>

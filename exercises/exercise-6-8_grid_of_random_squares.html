@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid of Random Square</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Grid of Random Squares</h1>
+    <script>
+        function setup() {
+            createCanvas(400, 400);
+        }
+
+        function draw() {
+            let size = map(mouseX, 0, width, 5, 100)
+            // let size = 10;
+            noStroke();
+            if (mouseIsPressed) {
+                for (let row = 0; row < height; row += size) {
+                    for (let col = 0; col < width; col += size) {
+                        fill(random(255));
+                        rect(col, row, size, size);
+                    }
+                }
+            }
+            fill(255);
+            rect(0, 0, 60, 30);
+            fill(0);
+            text(`${frameRate().toFixed(2)} fps`, 10, 20);
+
+        }
+    </script>
+</main>
+</body>
+</html>

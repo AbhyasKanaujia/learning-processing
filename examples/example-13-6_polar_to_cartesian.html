@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-9: Polar to Cartesian</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Ball.js"></script>
+    <script src="../lib/Grid.js"></script>
+</head>
+<body>
+<header>
+    <h1>Polar to Cartesian</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section id="description">
+        <p>The circle's <code>x</code> and <code>y</code> coordinates are calculated using polar coordinates.</p>
+    </section>
+
+    <section class="sketch-container">
+        <div id="sketch-block">
+            <div id="sketch"></div>
+            <div id="stats">
+                <p>
+                    <span class="stat-label">Radius:</span> <span id="radius"></span> px
+                </p>
+                <p>
+                    <span class="stat-label">Angle:</span> <span id="angle"></span> radians
+                </p>
+                <p>
+                    <span class="stat-label">Circle Position:</span> (<span id="circleX"></span>, <span
+                        id="circleY"></span>)
+                </p>
+
+            </div>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="radius-input">Radius:</label>
+                <input id="radius-input" type="number" value="100">
+                <p class="control-description">
+                    Distance of the circle from the center
+                </p>
+            </div>
+            <div class="control-group">
+                <label for="ball-size">Ball Size:</label>
+                <input id="ball-size" type="number" value="10">
+                <p class="control-description">
+                    Size of the ball
+                </p>
+            </div>
+            <div class="control-group">
+                <label for="angle-increment">Angle Increment:</label>
+                <input id="angle-increment" type="number" value="0.01">
+                <p class="control-description">
+                    How much the angle changes each frame
+                </p>
+            </div>
+            <div class="control-group">
+                <label for="trail-mode">Trail Mode:</label>
+                <div class="radio-group" id="trail-mode">
+                    <label>
+                        <input name="trail-mode" type="radio" value="no-trail">
+                        No Trail
+                    </label>
+                    <label>
+                        <input checked name="trail-mode" type="radio" value="trail">
+                        Trail
+                    </label>
+                    <label>
+                        <input name="trail-mode" type="radio" value="faded-trail">
+                        Faded Trail
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <button id="clear-background">Clear Background</button>
+            </div>
+
+        </div>
+    </section>
+
+
+</main>
+<script>
+
+    // Stats Display
+    const $container = document.querySelector("#sketch");
+    const $radiusStat = document.querySelector("#radius");
+    const $angleStat = document.querySelector("#angle");
+    const $circleXStat = document.querySelector("#circleX");
+    const $circleYStat = document.querySelector("#circleY");
+    let lastStatsUpdate = 0;
+
+    // Control Inputs
+    const $radiusInput = document.querySelector("#radius-input");
+    const $ballSizeInput = document.querySelector("#ball-size");
+    const $angleIncrementInput = document.querySelector("#angle-increment");
+    const $clearBackgroundButton = document.querySelector("#clear-background");
+    const $trailModeRadios = document.querySelectorAll('input[name="trail-mode"]');
+
+    // Game States
+    let x = -1;
+    let y = -1;
+    let radius = 100;
+    let angle = 0;
+
+    // Controls
+    let angleIncrement = 0.01;
+    let ballSize = 10;
+    let trailMode = "trail";
+
+    // Entities
+    let grid = null;
+    let ball = null;
+
+    function windowResized() {
+        resizeCanvas($container.offsetWidth, $container.offsetHeight);
+    }
+
+    function setup() {
+        const canvas = createCanvas($container.offsetWidth, $container.offsetHeight);
+        canvas.parent("sketch");
+        grid = new Grid();
+        ball = new Ball(width + ballSize, height + radius, ballSize);
+        grid.display();
+
+    }
+
+    function updateStats() {
+        $circleXStat.textContent = String(x.toFixed(2));
+        $circleYStat.textContent = String(y.toFixed(2));
+        $radiusStat.textContent = String(radius);
+        $angleStat.textContent = String(angle.toFixed(2))
+    }
+
+
+    function draw() {
+        // State update
+        x = radius * sin(angle);
+        y = radius * cos(angle);
+
+        // background(255);
+        if(trailMode === "no-trail") {
+            background(255);
+            grid.display();
+        } else if(trailMode === "faded-trail") {
+            background(255, 25);
+            grid.display();
+        }
+
+        ball.move(x + width / 2, y + height / 2);
+        ball.display();
+        angle += angleIncrement;
+
+        // UI Update
+        if (millis() - lastStatsUpdate > 80) {
+            updateStats()
+            lastStatsUpdate = millis();
+        }
+    }
+
+    $radiusInput.addEventListener("input", (event) => radius = parseInt(event.target.value));
+    $ballSizeInput.addEventListener("input", (event) => {
+        ballSize = parseInt(event.target.value);
+        ball.setSize(ballSize);
+    });
+    $angleIncrementInput.addEventListener("input", (event) => angleIncrement = parseFloat(event.target.value));
+
+    $clearBackgroundButton.addEventListener("click", () => {
+        background(255);
+        grid.display();
+    });
+
+    $trailModeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            trailMode = document.querySelector("input[name=trail-mode]:checked").value;
+            // Need to clear the background and lay grid once the trail mode changes
+            if(trailMode === "trail") {
+                background(255);
+                grid.display();
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

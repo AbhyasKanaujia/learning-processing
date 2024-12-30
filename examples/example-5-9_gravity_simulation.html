@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gravity Simulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Gravity Simulation</h1>
+    <script>
+        let x;
+        let y;
+        let speed = 0;
+        let gravity = 1;
+        let dampening = -0.5;
+        let minSpeed = Infinity;
+
+        function setup() {
+            createCanvas(400, 400);
+            rect(1, 1, width - 2, height - 2);
+
+            x = width / 2;
+            y = 0;
+        }
+
+        function draw() {
+            background(255);
+
+            fill(0);
+            noStroke();
+            circle(x, y, 10);
+
+            y += speed;
+            speed += gravity;
+
+            if (y + 5 > height) {
+                y = height - 5;
+                speed = speed * dampening;
+            }
+
+            stroke(0);
+            line(0, height, width, height);
+
+
+            minSpeed = min(minSpeed, abs(speed));
+            fill(0);
+            text("min speed: " + minSpeed, 10, 10);
+        }
+    </script>
+</main>
+</body>
+</html>

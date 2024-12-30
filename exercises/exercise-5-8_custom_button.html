@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Button</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Custom Button</h1>
+    <script>
+        let x = 0;
+        let y = 0;
+        const w = 100;
+        const h = 25;
+
+        function setup() {
+            createCanvas(400, 400);
+            x = width / 2;
+            y = height / 2;
+        }
+
+        function draw() {
+            fill("red")
+            rect(x, y, w, h);
+        }
+
+        function mousePressed() {
+            if (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
+                background(
+                    random(0, 255),
+                    random(0, 255),
+                    random(0, 255),
+                    random(0, 100)
+                )
+            }
+            return false;
+        }
+    </script>
+</main>
+</body>
+</html>

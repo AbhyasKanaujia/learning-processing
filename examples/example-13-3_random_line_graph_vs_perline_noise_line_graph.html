@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random vs Perlin Noise Line Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Graph.js"></script>
+    <script src="../lib/Grid.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 1rem;
+            text-align: center;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 1rem auto;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 150px;
+
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+
+            font-size: 14px;
+            color: white;
+
+            background-color: #007BFF;
+
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #004090;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Random vs Perlin Noise Line Graph</h1>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../examples.html">Examples</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <p>The graph on the left is a random line graph. The graph on the right is a Perlin noise line graph.</p>
+    <div id="sketch"></div>
+    <div class="controls">
+        <div class="control-group">
+            <label for="numberOfValues">Number of Values:</label>
+            <input id="numberOfValues" min="2" type="number" value="100">
+        </div>
+        <div class="control-group">
+            <label for="minValue">Min Value:</label>
+            <input id="minValue" type="number" value="0">
+        </div>
+        <div class="control-group">
+            <label for="maxValue">Max Value:</label>
+            <input id="maxValue" type="number" value="50">
+        </div>
+        <div class="control-group">
+            <label for="perlinIncrement">Perlin Increment:</label>
+            <input id="perlinIncrement" type="number" value="0.01" min="0" max="1">
+        </div>
+        <div class="control-group">
+            <button id="updateButton">Update Graph</button>
+        </div>
+
+    </div>
+</main>
+<script>// Constants and Globals
+const CONFIG = {
+    canvasWidth: 600,
+    canvasHeight: 300,
+    valueCount: 100,
+    minValue: 0,
+    maxValue: 50,
+    perlinStartTime: 150,
+    perlinIncrement: 0.01
+};
+
+let randomValues = [];
+let perlinValues = [];
+let randomLineGraph = null;
+let perlinLineGraph = null;
+let grid = null;
+
+// Utility Functions
+function generateRandomValues(count, min, max) {
+    return Array.from({length: count}, () => Math.floor(random(min, max) + 1));
+}
+
+function generatePerlinValues(count, min, max, increment = CONFIG.perlinIncrement) {
+    let time = CONFIG.perlinStartTime;
+    const perlinValues = Array.from({length: count}, () => {
+        const value = map(noise(time), 0, 1, min, max);
+        time += increment;
+        return value;
+    });
+    CONFIG.perlinStartTime = time;
+    return perlinValues;
+}
+
+// Visualization Class
+class Visualization {
+    constructor() {
+        this.randomValues = [];
+        this.perlinValues = [];
+        this.randomLineGraph = null;
+        this.perlinLineGraph = null;
+    }
+
+    init() {
+        // Initialize values
+        this.randomValues = generateRandomValues(CONFIG.valueCount, CONFIG.minValue, CONFIG.maxValue);
+        this.perlinValues = generatePerlinValues(CONFIG.valueCount, CONFIG.minValue, CONFIG.maxValue);
+
+        // Create graphs
+        this.randomLineGraph = new LineGraph(this.randomValues, 0, 0, CONFIG.canvasWidth / 2, CONFIG.canvasHeight);
+        this.perlinLineGraph = new LineGraph(this.perlinValues, CONFIG.canvasWidth / 2, 0, CONFIG.canvasWidth / 2, CONFIG.canvasHeight);
+    }
+
+    display() {
+        background(255);
+        // Display grid
+        grid.display();
+
+        // Display graphs
+        this.randomLineGraph.display();
+        this.perlinLineGraph.display();
+    }
+}
+
+// Global Visualization Object
+let visualization;
+
+// P5.js Functions
+function setup() {
+    const canvas = createCanvas(CONFIG.canvasWidth, CONFIG.canvasHeight);
+    canvas.parent('sketch');
+    grid = new Grid();
+    visualization = new Visualization();
+    visualization.init();
+    visualization.display();
+}
+
+document.getElementById('updateButton').addEventListener('click', () => {
+    const numberOfValues = parseInt(document.getElementById('numberOfValues').value);
+    const minValue = parseInt(document.getElementById('minValue').value);
+    const maxValue = parseInt(document.getElementById('maxValue').value);
+    CONFIG.perlinIncrement = parseFloat(document.getElementById('perlinIncrement').value);
+    CONFIG.valueCount = numberOfValues;
+    CONFIG.minValue = minValue;
+    CONFIG.maxValue = maxValue;
+    visualization.init();
+    visualization.display();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stickman</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Stickman</h1>
+    <script>
+        const darkGreen = "#1F4529";
+        const lightGreen = "#47663B";
+        const lightBeige = "#E8ECD7";
+        const darkBeige = "#EED3B1";
+
+        class StickMan {
+            constructor({posX, posY, stickManHeight = 400, stickManColor = "black"}) {
+                this.posX = posX ?? width / 2;
+                this.posY = posY ?? height / 2;
+                this.stickManHeight = stickManHeight;
+                this.unit = stickManHeight / 8;
+                this.stickManColor = stickManColor;
+            }
+
+            show() {
+                noStroke();
+                fill(this.stickManColor);
+
+                // Head
+                ellipse(
+                    this.posX,
+                    this.posY - (this.unit * 7 / 2),
+                    this.unit / 2, this.unit
+                );
+
+                // Neck
+                const neckThickness = this.unit / 4;
+                rect(
+                    this.posX - neckThickness / 2,
+                    this.posY - (this.unit * 3), neckThickness,
+                    this.unit / 2
+                );
+
+                // Shoulders
+                // top, right, left
+                triangle(
+                    this.posX, this.posY - (this.unit * 3),
+                    this.posX + this.unit, this.posY - (this.unit * 5 / 2),
+                    this.posX - this.unit, this.posY - (this.unit * 5 / 2)
+                );
+
+                // Chest
+                circle(
+                    this.posX,
+                    this.posY - (this.unit * 2),
+                    this.unit
+                )
+
+                // Spine
+                stroke(this.stickManColor);
+                strokeWeight(4);
+                line(
+                    this.posX,
+                    this.posY - (this.unit * 1.5),
+                    this.posX,
+                    this.posY - (this.unit * 1)
+                );
+                noStroke();
+
+                // Pelvis
+                circle(
+                    this.posX,
+                    this.posY - (this.unit * 0.5),
+                    this.unit
+                )
+
+                // Arms
+                stroke(this.stickManColor);
+                strokeWeight(4);
+                line(
+                    this.posX - this.unit,
+                    this.posY - (this.unit * 2.5),
+                    this.posX - this.unit,
+                    this.posY
+                );
+                line(
+                    this.posX + this.unit,
+                    this.posY - (this.unit * 2.5),
+                    this.posX + this.unit,
+                    this.posY
+                );
+
+                // Legs
+                stroke(this.stickManColor);
+                strokeWeight(4);
+                line(
+                    this.posX - this.unit / 2,
+                    this.posY,
+                    this.posX - this.unit / 2,
+                    this.posY + this.unit * 4
+                );
+                line(
+                    this.posX + this.unit / 2,
+                    this.posY,
+                    this.posX + this.unit / 2,
+                    this.posY + this.unit * 4
+                );
+
+            }
+        }
+
+        function setup() {
+            createCanvas(600, 600);
+            background(darkGreen);
+            const stickMan = new StickMan({});
+            stickMan.show();
+        }
+
+        function draw() {
+        }
+    </script>
+</main>
+</body>
+</html>

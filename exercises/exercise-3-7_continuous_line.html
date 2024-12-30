@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Continuous Line</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>Continuous Line</h1>
+    <script>
+        let lastUpdateTime = 0;
+        let currentFrameRate = 0;
+
+        function getMouseSpeed() {
+            return dist(mouseX, mouseY, pmouseX, pmouseY);
+        }
+
+        function showFrameRate() {
+            const now = millis();
+            if(now - lastUpdateTime > 1000) {
+                lastUpdateTime = now;
+                currentFrameRate = Math.floor(frameRate());
+            }
+
+            rectMode(CENTER)
+            fill("white");
+            rect(30, 10, 40, 20);
+            fill("black")
+            // strokeWeight(1);
+            textAlign(CENTER, CENTER);
+            stroke(0);
+            text(currentFrameRate + " fps", 30, 10);
+        }
+
+        function setup() {
+            createCanvas(400, 400);
+        }
+
+        function draw() {
+            showFrameRate();
+            stroke(0);
+            strokeWeight(getMouseSpeed());
+            line(pmouseX, pmouseY, mouseX, mouseY);
+
+        }
+    </script>
+</main>
+</body>
+</html>

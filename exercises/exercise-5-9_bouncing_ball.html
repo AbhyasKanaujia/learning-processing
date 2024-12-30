@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-3: Perlin Random Ball</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Grid.js"></script>
+    <script src="../lib/Ball.js"></script>
+</head>
+<body>
+<header>
+    <h1>Drawing using shapes</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="sketch"></div>
+</main>
+<script>
+    let bouncingBall = null;
+    let grid = null;
+
+    function setup() {
+        const container = document.querySelector("#sketch");
+        const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+        canvas.parent("sketch");
+        bouncingBall = new BouncingBall(51, 51, 1, 1.1, 20);
+        grid = new Grid();
+    }
+
+    function draw() {
+        background(255);
+        grid.display();
+        bouncingBall.move();
+        bouncingBall.display();
+    }
+</script>
+</body>
+</html>

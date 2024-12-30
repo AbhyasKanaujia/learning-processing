@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-9: Radian and Degrees</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Ball.js"></script>
+    <script src="../lib/Grid.js"></script>
+</head>
+<body>
+<header>
+    <h1>Radian and Degrees</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section id="description">
+        <p>Converting and Visualizing Radians and Degrees</p>
+    </section>
+
+    <section class="sketch-container">
+        <div id="sketch-block">
+            <div id="sketch"></div>
+            <div id="stats">
+                <p>
+                    <span class="stat-label">Mouse Position:</span> (<span id="mouseX"></span>, <span
+                        id="mouseY"></span>)
+                </p>
+                <p>
+                    <span class="stat-label">Perpendicular:</span> <span id="perpendicular"></span> px
+                </p>
+                <p>
+                    <span class="stat-label">Base:</span> <span id="base"></span> px
+                </p>
+
+                <p>
+                    <span class="stat-label">Angle:</span> <span id="angle-degrees"></span> degrees | <span
+                        id="angle-radians"></span> radians
+                </p>
+                <p>
+                    <span class="stat-label">Distance from center:</span> <span id="distance"></span> px
+                </p>
+
+            </div>
+        </div>
+        <!--        <div class="controls">-->
+        <!--            <div class="control-group">-->
+        <!--                <label for="perlinYIncrement">Perlin Y Increment:</label>-->
+        <!--                <input id="perlinYIncrement" max="1" min="0" step="0.0001" type="number" value="0.001">-->
+        <!--                <p class="control-description">-->
+        <!--                    Adjust the Perlin noise increment for the Y-axis. Similar to X, this controls how smoothly the ball-->
+        <!--                    moves vertically.-->
+        <!--                </p>-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </section>
+
+
+</main>
+<script>
+    let grid = null;
+    const $mouseXStat = document.querySelector("#mouseX");
+    const $mouseYStat = document.querySelector("#mouseY");
+    const $perpendicularStat = document.querySelector("#perpendicular");
+    const $baseStat = document.querySelector("#base");
+    const $angleDegreesStat = document.querySelector("#angle-degrees");
+    const $angleRadiansStat = document.querySelector("#angle-radians");
+    const $distanceStat = document.querySelector("#distance");
+    let lastUIUpdate = 0;
+
+    let x = -1;
+    let y = -1;
+    let perpendicular = -1;
+    let base = -1;
+    let hypotenuse = -1;
+    let angleDegrees = -1;
+    let angleRadians = -1;
+
+    function setup() {
+        const container = document.querySelector("#sketch");
+        const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+        canvas.parent("sketch");
+        grid = new Grid();
+    }
+
+    function updateStats() {
+        $mouseXStat.innerText = x;
+        $mouseYStat.innerText = y;
+        $distanceStat.innerText = hypotenuse
+        $perpendicularStat.innerText = perpendicular;
+        $baseStat.innerText = base;
+        $angleDegreesStat.innerText = angleDegrees;
+        $angleRadiansStat.innerText = angleRadians.toFixed(2);
+    }
+
+
+    function draw() {
+        background(255);
+        grid.display();
+        fill(0);
+        // Axes
+        line(0, height / 2, width, height / 2);
+        line(width / 2, 0, width / 2, height);
+
+        // Center
+        circle(width / 2, height / 2, 5);
+
+        // Line to mouse
+        line(width / 2, height / 2, mouseX, mouseY);
+        circle(mouseX, mouseY, 5);
+
+        // Component lines
+        x = mouseX - width / 2;
+        y = (mouseY - height / 2) * -1;
+        perpendicular = Math.round(dist(width / 2, height / 2, width / 2, mouseY));
+        base = Math.round(dist(width / 2, height / 2, mouseX, height / 2));
+        hypotenuse = Math.round(dist(width / 2, height / 2, mouseX, mouseY));
+        angleRadians = Math.atan2(y, x);
+        angleDegrees = Math.round(angleRadians * 180 / Math.PI);
+
+        push();
+        stroke(150);
+        strokeWeight(2)
+        line(width / 2, height / 2, pmouseX, height / 2);
+        line(mouseX, mouseY, mouseX, height / 2);
+        textAlign(CENTER)
+        noStroke();
+        if (abs(x) > 40) {
+            text("b = " + base, (width / 2 + pmouseX) / 2, height / 2);
+        }
+        if (abs(y) > 40) {
+            text("p = " + perpendicular, mouseX + 24, (height / 2 + mouseY) / 2);
+        }
+        if (hypotenuse > 40) {
+            text("h = " + hypotenuse, (mouseX + width / 2) / 2 - 12, (height / 2 + mouseY) / 2 - 12);
+        }
+
+        if (abs(x) > 40 && abs(y) > 40) {
+            text("θ = " + Math.round(Math.atan2(y, x) * 180 / Math.PI), width / 2 + 24, height / 2);
+        }
+
+        pop();
+
+        // Arc
+        noFill();
+        const arcSize = hypotenuse * 0.4;
+        arc(width / 2, height / 2, arcSize, arcSize, -angleRadians, 0);
+
+        // UI Update
+        if (millis() - lastUIUpdate > 80) {
+            updateStats()
+            lastUIUpdate = millis();
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 1-5</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+</head>
+<body>
+<header>
+    <h1>Drawing using shapes</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="sketch"></div>
+</main>
+<script>
+    function setup() {
+        const canvas = createCanvas(windowWidth, windowHeight);
+        canvas.parent("sketch");
+        fill(0, 0, 255);
+        ellipse(20, 40, 16, 16);
+        fill(200, 0, 200);
+        ellipse(40, 40, 16, 16);
+        fill(255, 255, 0);
+        ellipse(60, 40, 16, 16);
+    }
+</script>
+</body>
+</html>

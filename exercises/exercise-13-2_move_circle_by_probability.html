@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise 13-3: Perlin Random Ball</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Grid.js"></script>
+    <script src="../lib/Ball.js"></script>
+</head>
+<body>
+<header>
+    <h1>Move Circle by Probability</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="../exercises.html">Exercises</a>
+            </li>
+            <li>
+                <a href="../examples.html">Examples</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <div id="sketch"></div>
+    <p>This ball has the following rules:</p>
+    <ol>
+        <li>With a probability of 10% move up</li>
+        <li>With a probability of 20% move down</li>
+        <li>With a probability of 70% do nothing</li>
+    </ol>
+</main>
+<script>
+    let grid = null;
+    let ball = null;
+
+    function setup() {
+        const canvas = createCanvas(600, 600);
+        canvas.parent('sketch');
+        grid = new Grid();
+        ball = new Ball();
+    }
+
+    function draw() {
+        background(255);
+        grid.display();
+        ball.display();
+        const movementChoice = random(0, 1);
+        if (movementChoice < 0.1) {
+            ball.moveUp(10);
+        } else if (movementChoice < 0.3) {
+            ball.moveDown(10);
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 0.2) 100%); /* Subtle radial gradient */
+    color: #333333;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    margin: 1rem auto;
+}
+
+header h1 {
+    text-align: center;
+    font-family: "PT Serif", serif;
+    text-transform: capitalize;
+    margin-bottom: 0.5rem;
+}
+
+/* Navigation */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 1rem;
+
+    text-transform: uppercase;
+}
+
+nav ul li a {
+    color: #333;
+}
+
+/* Main Content */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+section {
+    margin: 1.5rem 0;
+}
+
+
+/* Sketch Container (Layout Wrapper for sketch and controls) */
+.sketch-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: 1rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    margin: 1rem auto;
+}
+
+#stats {
+    font-family: "Droid Sans Mono", monospace;
+    display: flex;
+    flex-direction: column;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-label {
+    font-weight: bold;
+}
+
+/* Sketch */
+#sketch-block {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+#sketch {
+    outline: 1px solid #333333;
+    min-height: 400px;
+    flex: 1;
+}
+
+
+/* Controls */
+.controls {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 300px;
+    gap: 2rem;
+    height: 400px;
+    overflow-y: scroll;
+
+    padding: 1rem;
+    border: 1px solid #ccc;
+
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(250, 250, 250, 0.2) 100%);
+    box-shadow: 0 2px 2px rgba(100, 100, 100, 0.1);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    flex: 1;
+    font-size: 1rem;
+    color: #555;
+    font-weight: bold;
+}
+
+.control-group input {
+    flex: 2;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+}
+
+.control-group button {
+    flex: 2;
+    padding: 0.5rem;
+    background: none;
+    border: 1px solid #ccc;
+}
+
+.control-group button:hover {
+    background-color: #f0f0f0;
+}
+
+.control-group button:active {
+    background-color: #e0e0e0;
+}
+
+.control-group input:focus {
+    outline: none;
+    border-color: #333333;
+    box-shadow: 0 0 5px rgba(204, 204, 204, 0.5);
+}
+
+.control-description {
+    font-size: 0.875rem; /* Slightly smaller font for descriptions */
+    color: #666; /* Subtle text color */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sketch-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .controls {
+        width: 100%;
+        flex-basis: auto;
+    }
+
+    #sketch {
+        width: 100%;
+        min-height: 300px; /* Adjust canvas size for smaller screens */
+    }
+}
