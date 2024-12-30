@@ -16,12 +16,7 @@
             <li>
                 <a href="../index.html">Home</a>
             </li>
-            <li>
-                <a href="../exercises.html">Exercises</a>
-            </li>
-            <li>
-                <a href="../examples.html">Examples</a>
-            </li>
+
         </ul>
     </nav>
 </header>
@@ -176,12 +171,7 @@
         radius += radiusDelta;
 
         // background(255);
-        if (trailMode === "no-trail") {
-            resetBackground();
-        } else if (trailMode === "faded-trail") {
-            background(255, 25);
-            grid.display();
-        }
+
 
         ball.move(x + width / 2, y + height / 2);
         ball.display();

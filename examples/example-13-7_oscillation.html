@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example 3-10: Oscillation</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Ball.js"></script>
+    <script src="../lib/Grid.js"></script>
+</head>
+<body>
+<header>
+    <h1>Oscillation</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+
+        </ul>
+    </nav>
+</header>
+<main>
+    <section id="description">
+        <p>A pendulum moves by assigning its location based on the sine function.</p>
+    </section>
+
+    <section class="sketch-container">
+        <div id="sketch-block">
+            <div id="sketch"></div>
+            <div id="stats">
+            </div>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="pendulum-size">Pendulum Size</label>
+                <input id="pendulum-size" type=number value="20">
+            </div>
+            <div class="control-group">
+                <label for="oscillation-range">Oscillation Range</label>
+                <input id="oscillation-range" type=number value="200">
+            </div>
+            <div class="control-group">
+                <label for="angle-increment">Angle Increment</label>
+                <input id="angle-increment" type=number value="0.02" step="0.001">
+            </div>
+            <div class="control-group">
+                <label for="trail-mode">Trail Mode:</label>
+                <div class="radio-group" id="trail-mode">
+                    <label>
+                        <input name="trail-mode" type="radio" value="no-trail" checked>
+                        No Trail
+                    </label>
+                    <label>
+                        <input name="trail-mode" type="radio" value="trail">
+                        Trail
+                    </label>
+                    <label>
+                        <input name="trail-mode" type="radio" value="faded-trail">
+                        Faded Trail
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article>
+        <p>The movement looks very unnatural. The string seems to be stretching and the bal is simply moving left to right.
+        This is because only the x-axis of the bob is attached to the sine function. </p>
+    </article>
+
+
+</main>
+<script>
+    const $container = document.getElementById("sketch");
+    const $trailModeRadios = document.querySelectorAll('input[name="trail-mode"]');
+    let lastStatsUpdate = 0;
+    // Stats Display
+
+    // Control Inputs
+
+    // Game States
+    let x = 0;
+    let y = 0;
+    let angle = 0;
+
+    // Control Variables
+    let oscillationRange = 200;
+    let angleIncrement = 0.02;
+    let pendulumSize = 20;
+    let trailMode = "no-trail"
+
+    // Entities
+
+    function windowResized() {
+        resizeCanvas($container.offsetWidth, $container.offsetHeight);
+    }
+
+    function getXPos(angle) {
+        return width / 2 - map(sin(angle), -1, 1, 0, oscillationRange) + oscillationRange / 2;
+    }
+
+    function setup() {
+        const canvas = createCanvas($container.offsetWidth, $container.offsetHeight);
+        canvas.parent("sketch");
+        grid = new Grid();
+        grid.display();
+
+        y = height / 2;
+    }
+
+    function resetBackground() {
+        background(255);
+        grid.display();
+    }
+
+    function updateUI() {
+    }
+
+    function handleTrail() {
+        if (trailMode === "no-trail") {
+            resetBackground();
+        } else if (trailMode === "faded-trail") {
+            background(255, 25);
+            grid.display();
+        }
+    }
+
+
+    function draw() {
+        // State update
+        x = getXPos(angle);
+        angle += angleIncrement;
+
+        // Sketch Update
+        handleTrail();
+        grid.display();
+        line(width / 2, 0, x, y);
+        circle(x, y, pendulumSize);
+
+        // UI Update
+        if (millis() - lastStatsUpdate > 80) {
+            updateUI()
+            lastStatsUpdate = millis();
+        }
+    }
+
+    document.getElementById("pendulum-size").addEventListener("input",
+        (event) => {
+            const inputValue = event.target.value
+            pendulumSize = inputValue && !isNaN(inputValue)
+                ? parseInt(inputValue) : pendulumSize;
+        }
+    )
+    document.getElementById("oscillation-range").addEventListener("input", event => {
+            const inputValue = event.target.value
+            oscillationRange = inputValue && !isNaN(inputValue)
+                ? parseInt(inputValue) : oscillationRange;
+        }
+    )
+    document.getElementById("angle-increment").addEventListener("input",
+        (event) => {
+            const inputValue = event.target.value
+            angleIncrement = inputValue && !isNaN(inputValue) ? parseFloat(inputValue) : angleIncrement
+        }
+    )
+    $trailModeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            trailMode = document.querySelector("input[name=trail-mode]:checked").value;
+            // Need to clear the background and lay grid once the trail mode changes
+            if (trailMode === "trail") {
+                resetBackground();
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

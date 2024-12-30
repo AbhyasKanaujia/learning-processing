@@ -6,126 +6,56 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
     <script src="../lib/Graph.js"></script>
     <script src="../lib/Grid.js"></script>
-    <style>
-        body {
-            padding: 0;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-
-        p {
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            margin: 1rem;
-            text-align: center;
-        }
-
-        main {
-            max-width: 600px;
-            margin: 1rem auto;
-        }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        label {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        input[type="number"] {
-            width: 150px;
-
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-
-            font-size: 14px;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-
-            font-size: 14px;
-            color: white;
-
-            background-color: #007BFF;
-
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        button:active {
-            background-color: #004090;
-        }
-    </style>
+    <link href="../css/styles.css" rel="stylesheet">
 </head>
 <body>
 <header>
     <h1>Random vs Perlin Noise Line Graph</h1>
     <nav>
         <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../examples.html">Examples</a></li>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
         </ul>
     </nav>
 </header>
 <main>
-    <p>The graph on the left is a random line graph. The graph on the right is a Perlin noise line graph.</p>
-    <div id="sketch"></div>
-    <div class="controls">
-        <div class="control-group">
-            <label for="numberOfValues">Number of Values:</label>
-            <input id="numberOfValues" min="2" type="number" value="100">
-        </div>
-        <div class="control-group">
-            <label for="minValue">Min Value:</label>
-            <input id="minValue" type="number" value="0">
-        </div>
-        <div class="control-group">
-            <label for="maxValue">Max Value:</label>
-            <input id="maxValue" type="number" value="50">
-        </div>
-        <div class="control-group">
-            <label for="perlinIncrement">Perlin Increment:</label>
-            <input id="perlinIncrement" type="number" value="0.01" min="0" max="1">
-        </div>
-        <div class="control-group">
-            <button id="updateButton">Update Graph</button>
-        </div>
+    <section id="description">
+        <p>The graph on the left is a random line graph. The graph on the right is a Perlin noise line graph.</p>
+    </section>
 
-    </div>
+    <section class="sketch-container">
+        <div id="sketch-block">
+            <div id="sketch"></div>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="numberOfValues">Number of Values:</label>
+                <input id="numberOfValues" min="2" type="number" value="100">
+            </div>
+            <div class="control-group">
+                <label for="minValue">Min Value:</label>
+                <input id="minValue" type="number" value="0">
+            </div>
+            <div class="control-group">
+                <label for="maxValue">Max Value:</label>
+                <input id="maxValue" type="number" value="50">
+            </div>
+            <div class="control-group">
+                <label for="perlinIncrement">Perlin Increment:</label>
+                <input id="perlinIncrement" max="1" min="0" type="number" value="0.01">
+            </div>
+            <div class="control-group">
+                <button id="updateButton">Update Graph</button>
+            </div>
+        </div>
+    </section>
 </main>
 <script>// Constants and Globals
 const CONFIG = {
-    canvasWidth: 600,
-    canvasHeight: 300,
+    canvasWidth: 0,
+    canvasHeight: 0,
     valueCount: 100,
     minValue: 0,
     maxValue: 50,
@@ -133,10 +63,7 @@ const CONFIG = {
     perlinIncrement: 0.01
 };
 
-let randomValues = [];
-let perlinValues = [];
-let randomLineGraph = null;
-let perlinLineGraph = null;
+
 let grid = null;
 
 // Utility Functions
@@ -190,7 +117,10 @@ let visualization;
 
 // P5.js Functions
 function setup() {
-    const canvas = createCanvas(CONFIG.canvasWidth, CONFIG.canvasHeight);
+    const container = document.querySelector('#sketch');
+    const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+    CONFIG.canvasWidth = canvas.width;
+    CONFIG.canvasHeight = canvas.height;
     canvas.parent('sketch');
     grid = new Grid();
     visualization = new Visualization();

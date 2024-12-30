@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wave</title>
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.2/lib/p5.min.js"></script>
+    <script src="../lib/Grid.js"></script>
+</head>
+<body>
+<header>
+    <h1>Wave</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section id="description">
+        <p>Waves</p>
+    </section>
+
+    <section class="sketch-container">
+        <div id="sketch-block">
+            <div id="sketch"></div>
+            <div id="stats">
+                <p>
+                    <!--                    <span class="stat-label">Mouse Position:</span> (<span id="mouseX"></span>, <span-->
+                    <!--                        id="mouseY"></span>)-->
+                    <!--                </p>-->
+            </div>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="wave-function">Function:</label>
+                <select id="wave-function">
+                    <option value="sin">sin</option>
+                    <option value="cos">cos</option>
+                    <option value="tan">tan</option>
+                    <option value="perlin">perlin</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="spacing">Spacing:</label>
+                <input id="spacing" min="0" type="number" value="40">
+            </div>
+            <div class="control-group">
+                <label for="radius">Radius:</label>
+                <input id="radius" min="0" type="number" value="10">
+            </div>
+        </div>
+    </section>
+
+
+</main>
+<script>
+    let grid = null;
+    let theta = 0.0;
+    let lastUpdateTime = 0;
+
+    // Controls
+    let spacing = 40;
+    let radius = 10;
+    let waveFunction = "sin";
+
+    function setup() {
+        const container = document.querySelector("#sketch");
+        const canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+        canvas.parent("sketch");
+        grid = new Grid();
+    }
+
+
+    function updateStats() {
+        if (millis() - lastUpdateTime < 80) return
+        lastUpdateTime = millis()
+    }
+
+    function getWaveFunction() {
+        switch (waveFunction) {
+            case "sin":
+                return (theta, i) => map(sin(theta - i / 25 * PI), -1, 1, 0, height);
+            case "cos":
+                return (theta, i) => map(cos(theta - i / 25 * PI), -1, 1, 0, height);
+            case "tan":
+                return (theta, i) => map(tan(theta - i / 25 * PI), -1, 1, 0, height);
+            case "perlin":
+                return (theta, i) => map(noise(theta - i * 0.1), 0, 1, 0, height);
+        }
+    }
+
+
+    function draw() {
+        background(255);
+        grid.display();
+
+        x = theta;
+        let i = 0;
+        while(i * spacing < width) {
+            // let y = map(sin(theta - (i / 25* 0.5 * PI)), -1, 1, 0, height);
+            let y = getWaveFunction()(theta, i);
+            circle(i * spacing + radius, y, radius * 2);
+        }
+
+        theta += 0.001;
+
+        updateStats();
+    }
+
+    document.getElementById("wave-function").addEventListener("input", event => waveFunction = event.target.value)
+    document.getElementById("spacing").addEventListener("input", event => {
+        const inputValue = parseInt(event.target.value);
+        spacing = constrain(parseInt(event.target.value), 1, width);
+
+    })
+    document.getElementById("radius").addEventListener("input", event => {
+        radius = parseInt(event.target.value)
+    })
+</script>
+</body>
+</html>
