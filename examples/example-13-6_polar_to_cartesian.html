@@ -56,6 +56,14 @@
                 </p>
             </div>
             <div class="control-group">
+                <label for="radius-delta">Radius Delta:</label>
+                <input id="radius-delta" step="0.001" type="number" value="0">
+                <p class="control-description">
+                    How much the radius changes each frame. Positive values increase the radius, negative values
+                    decrease it.
+                </p>
+            </div>
+            <div class="control-group">
                 <label for="ball-size">Ball Size:</label>
                 <input id="ball-size" type="number" value="10">
                 <p class="control-description">
@@ -107,6 +115,7 @@
 
     // Control Inputs
     const $radiusInput = document.querySelector("#radius-input");
+    const $radiusDeltaInput = document.querySelector("#radius-delta");
     const $ballSizeInput = document.querySelector("#ball-size");
     const $angleIncrementInput = document.querySelector("#angle-increment");
     const $clearBackgroundButton = document.querySelector("#clear-background");
@@ -122,6 +131,8 @@
     let angleIncrement = 0.01;
     let ballSize = 10;
     let trailMode = "trail";
+    let radiusDelta = 0;
+    let isRadiusInputFocused = false;
 
     // Entities
     let grid = null;
@@ -140,11 +151,20 @@
 
     }
 
-    function updateStats() {
+    function resetBackground() {
+        background(255);
+        grid.display();
+    }
+
+    function updateUI() {
         $circleXStat.textContent = String(x.toFixed(2));
         $circleYStat.textContent = String(y.toFixed(2));
-        $radiusStat.textContent = String(radius);
-        $angleStat.textContent = String(angle.toFixed(2))
+        $radiusStat.textContent = String(radius.toFixed(2));
+        $angleStat.textContent = String(angle.toFixed(2));
+
+        if(!isRadiusInputFocused) {
+            $radiusInput.value = String(radius.toFixed(2));
+        }
     }
 
 
@@ -153,11 +173,12 @@
         x = radius * sin(angle);
         y = radius * cos(angle);
 
+        radius += radiusDelta;
+
         // background(255);
-        if(trailMode === "no-trail") {
-            background(255);
-            grid.display();
-        } else if(trailMode === "faded-trail") {
+        if (trailMode === "no-trail") {
+            resetBackground();
+        } else if (trailMode === "faded-trail") {
             background(255, 25);
             grid.display();
         }
@@ -168,12 +189,20 @@
 
         // UI Update
         if (millis() - lastStatsUpdate > 80) {
-            updateStats()
+            updateUI()
             lastStatsUpdate = millis();
         }
     }
 
-    $radiusInput.addEventListener("input", (event) => radius = parseInt(event.target.value));
+    $radiusInput.addEventListener("input", (event) => {
+        radius = parseInt(event.target.value)
+    });
+    $radiusInput.addEventListener("focus", (event) => isRadiusInputFocused = true);
+    $radiusInput.addEventListener("blur", (event) => isRadiusInputFocused = false);
+    $radiusDeltaInput.addEventListener("input", (event) => {
+        const value = parseFloat(event.target.value);
+        radiusDelta = !isNaN(value) ? value : 0;
+    });
     $ballSizeInput.addEventListener("input", (event) => {
         ballSize = parseInt(event.target.value);
         ball.setSize(ballSize);
@@ -189,9 +218,8 @@
         radio.addEventListener('change', () => {
             trailMode = document.querySelector("input[name=trail-mode]:checked").value;
             // Need to clear the background and lay grid once the trail mode changes
-            if(trailMode === "trail") {
-                background(255);
-                grid.display();
+            if (trailMode === "trail") {
+                resetBackground();
             }
         });
     });
